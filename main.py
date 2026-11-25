@@ -43,8 +43,11 @@ def main():
     with open(path, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(JOKE)
 
-    with open(path, "r", encoding="utf-8") as handle:
-        written = handle.read()
+    with open(path, "rb") as handle:
+        written_bytes = handle.read()
+    if written_bytes != JOKE.encode("utf-8"):
+        raise SystemExit("written entry is not byte-identical to the joke")
+    written = written_bytes.decode("utf-8")
     recheck = validate(written)
     if recheck:
         raise SystemExit("written entry failed re-validation: " + "; ".join(recheck))
